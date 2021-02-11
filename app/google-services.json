@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "660883218502",
+    "project_id": "cashout-9c703",
+    "storage_bucket": "cashout-9c703.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:660883218502:android:4e770b6122aef2c300ea47",
+        "android_client_info": {
+          "package_name": "com.cashapp.cashout"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "660883218502-dqv3ap9rko5pdf80dia607mrnkb5o9c4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cashapp.cashout",
+            "certificate_hash": "4d53822338a527472c6e159a1eff68ffecbec719"
+          }
+        },
+        {
+          "client_id": "660883218502-htq1sl0jspce4eg35k9c40ebg15l5jpk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAj8fb7t4Tg0O0DkxL0eADUpVW7O_ZbZo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "660883218502-htq1sl0jspce4eg35k9c40ebg15l5jpk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
