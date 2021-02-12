@@ -9,19 +9,10 @@
     tools:context="com.cashapp.cashout.LoginActivity">
 
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="267dp"
-        android:layout_height="280dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        app:srcCompat="@drawable/full_logo" />
-
     <EditText
         android:id="@+id/username_et"
-        android:layout_width="250dp"
-        android:layout_height="40dp"
+        android:layout_width="843dp"
+        android:layout_height="41dp"
         android:layout_above="@+id/password_et"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="35dp"
@@ -35,18 +26,18 @@
 
     <EditText
         android:id="@+id/password_et"
-        android:layout_width="250dp"
-        android:layout_height="40dp"
+        android:layout_width="843dp"
+        android:layout_height="41dp"
+        android:layout_alignStart="@+id/username_et"
+        android:layout_alignLeft="@+id/username_et"
+        android:layout_alignBottom="@+id/login_btn"
+        android:layout_marginBottom="132dp"
         android:background="#11EDE6E6"
         android:drawableLeft="@drawable/ic_action_pass"
-        android:textColorHint="@color/white"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
-        android:layout_marginBottom="130dp"
-        android:layout_alignBottom="@+id/login_btn"
-        android:layout_alignLeft="@+id/username_et"
-        android:layout_alignStart="@+id/username_et" />
+        android:textColorHint="@color/white" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="300dp"
@@ -78,6 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Register Here."
+        android:textColor="@color/white"
         android:layout_above="@+id/linearLayout"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="6dp" />

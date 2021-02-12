@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.android.billingclient.api.*
@@ -14,6 +15,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -26,6 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main)
         userId = intent.getStringExtra("user_id")!!
         val emailId = intent.getStringExtra("email_id")
@@ -157,7 +161,7 @@ class MainActivity : AppCompatActivity() {
 
                     val purch = hashMapOf(
                         "amount" to map[purchase.sku],
-                        "purchase_time" to purchase.purchaseTime,
+                        "purchase_time" to Date(purchase.purchaseTime),
                         "purchase_token" to purchase.purchaseToken,
                         "order_id" to purchase.orderId,
                         "account_identifiers" to purchase.accountIdentifiers

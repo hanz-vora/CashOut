@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cashapp.cashout">
 
+    <supports-screens
+        android:normalScreens="true"></supports-screens>
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.vending.BILLING" />
     <application
@@ -10,6 +13,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
+
         android:theme="@style/Theme.CashOut">
         <activity android:name="com.cashapp.cashout.RegisterActivity"></activity>
         <activity android:name="com.cashapp.cashout.LoginActivity">
