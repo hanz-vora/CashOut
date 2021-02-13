@@ -5,32 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp">
+
+
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/txt_product_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="30dp"
-        android:text="Hello World!"
+        android:id="@+id/product_099"
         android:visibility="gone"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/txt_product_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:text="Sample Description"
-        android:visibility="gone"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txt_product_name" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/txt_product_buy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -39,27 +22,52 @@
         android:paddingTop="10dp"
         android:paddingRight="30dp"
         android:paddingBottom="10dp"
-        android:text="TRANSFER FUNDS"
+        android:text="TRANSFER $0.99 CAD"
         android:textColor="@android:color/white"
         android:textSize="18sp"
-        android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txt_product_description"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_goneMarginTop="100dp" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/product_499"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:background="@color/colorAccent"
+        android:paddingLeft="30dp"
+        android:paddingTop="10dp"
+        android:paddingRight="30dp"
+        android:paddingBottom="10dp"
+        android:text="TRANSFER $4.99 CAD"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/product_099"
+        app:layout_goneMarginTop="100dp" />
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.cashapp.cashout.LoginActivity">
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/product_999"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:background="@color/colorAccent"
+        android:paddingLeft="30dp"
+        android:paddingTop="10dp"
+        android:paddingRight="30dp"
+        android:paddingBottom="10dp"
+        android:text="TRANSFER $9.99 CAD"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/product_499"
+        app:layout_goneMarginTop="100dp" />
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/amount"
@@ -67,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="150dp"
-                android:layout_marginTop="400dp"
+                android:layout_marginTop="100dp"
                 android:layout_marginEnd="150dp"
                 android:text = "0"
                 android:textAlignment="center"
@@ -75,7 +83,7 @@
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/product_999" />
             <TextView
                 android:layout_width="320dp"
                 android:layout_height="wrap_content"
@@ -86,10 +94,11 @@
                 android:text = "60% of Amount Transferred will be sent to your PayPal in 2-3 weeks"
                 android:textAlignment="center"
                 android:textColor="@color/teal_200"
+                android:id="@+id/amount_desc"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/amount" />
 
             <TextView
                 android:id="@+id/main_email"
@@ -97,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="150dp"
-                android:layout_marginTop="200dp"
+                android:layout_marginTop="80dp"
                 android:layout_marginEnd="150dp"
                 android:text="temp@gmail.com"
                 android:textAlignment="center"
@@ -105,7 +114,7 @@
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBottom_toTopOf="@id/button_logout" />
 
             <Button
                 android:id="@+id/button_logout"
@@ -124,10 +133,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/main_email"
                 app:layout_constraintVertical_bias="0.045"></Button>
-        </LinearLayout>
-    </RelativeLayout>
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
