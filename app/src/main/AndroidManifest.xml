@@ -15,8 +15,10 @@
         android:supportsRtl="true"
 
         android:theme="@style/Theme.CashOut">
-        <activity android:name="com.cashapp.cashout.RegisterActivity"></activity>
-        <activity android:name="com.cashapp.cashout.LoginActivity">
+        <activity android:name="com.cashapp.cashout.RegisterActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name="com.cashapp.cashout.LoginActivity"
+            android:screenOrientation="portrait">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,7 +26,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.cashapp.cashout.MainActivity"></activity>
+        <activity android:name="com.cashapp.cashout.MainActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
