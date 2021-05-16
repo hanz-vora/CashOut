@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.billingclient.api.*
 import com.google.firebase.auth.FirebaseAuth
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private var userId = ""
     private var fs = Firebase.firestore
     private val db = FirebaseFirestore.getInstance()
-    val map = mapOf("99_credits" to 0.99, "499_credits" to 4.99, "999_credits" to 999)
+    val map = mapOf("99_credits" to 0.99, "499_credits" to 4.99, "999_credits" to 9.99)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         main_email.text = "Account: $emailId"
         updateAmount()
         setUpBillingClient()
-        initListeners()
+        //initListeners()
         button_logout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
 
@@ -58,19 +59,20 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-    private fun initListeners() {
-        txt_product_buy?.setOnClickListener {
-            // Retrieve a value for "skuDetails" by calling querySkuDetailsAsync().
-            // Retrieve a value for "skuDetails" by calling querySkuDetailsAsync().
-            skuDetails?.let {
-                val billingFlowParams = BillingFlowParams.newBuilder()
-                    .setSkuDetails(it)
-                    .build()
-                billingClient?.launchBillingFlow(this, billingFlowParams)?.responseCode
-            } ?: noSKUMessage()
 
-        }
-    }
+//    private fun initListeners() {
+//        product_099?.setOnClickListener {
+//            // Retrieve a value for "skuDetails" by calling querySkuDetailsAsync().
+//            // Retrieve a value for "skuDetails" by calling querySkuDetailsAsync().
+//            skuDetails?.let {
+//                val billingFlowParams = BillingFlowParams.newBuilder()
+//                    .setSkuDetails(it)
+//                    .build()
+//                billingClient?.launchBillingFlow(this, billingFlowParams)?.responseCode
+//            } ?: noSKUMessage()
+//
+//        }
+//    }
 
     private fun noSKUMessage() {
 
@@ -114,8 +116,41 @@ class MainActivity : AppCompatActivity() {
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && !skuDetailsList.isNullOrEmpty()) {
                 for (skuDetails in skuDetailsList) {
                     Log.v("TAG_INAPP", "skuDetailsList : ${skuDetailsList}")
+
+                    if(skuDetails.sku == "99_credits"){
+                        updateUI(skuDetails)
+                        product_099.setOnClickListener {
+                            val billingFlowParams = BillingFlowParams
+                                .newBuilder()
+                                .setSkuDetails(skuDetails)
+                                .build()
+                            billingClient?.launchBillingFlow(this, billingFlowParams)
+                        }
+                    }
+
+                    if(skuDetails.sku == "499_credits"){
+                        updateUI(skuDetails)
+                        product_499.setOnClickListener {
+                            val billingFlowParams = BillingFlowParams
+                                .newBuilder()
+                                .setSkuDetails(skuDetails)
+                                .build()
+                            billingClient?.launchBillingFlow(this, billingFlowParams)
+                        }
+                    }
+
+                    if(skuDetails.sku == "999_credits"){
+                        updateUI(skuDetails)
+                        product_999.setOnClickListener {
+                            val billingFlowParams = BillingFlowParams
+                                .newBuilder()
+                                .setSkuDetails(skuDetails)
+                                .build()
+                            billingClient?.launchBillingFlow(this, billingFlowParams)
+                        }
+                    }
+
                     //This list should contain the products added above
-                    updateUI(skuDetails)
                 }
             }
         }
@@ -126,14 +161,20 @@ class MainActivity : AppCompatActivity() {
             this.skuDetails = it
 //            txt_product_name?.text = skuDetails.title
 //            txt_product_description?.text = skuDetails.description
-            showUIElements()
+            showUIElements(skuDetails.sku)
         }
     }
 
-    private fun showUIElements() {
+    private fun showUIElements(sku: String) {
 //        txt_product_name?.visibility = View.VISIBLE
 //        txt_product_description?.visibility = View.VISIBLE
-        txt_product_buy?.visibility = View.VISIBLE
+        if(sku == "99_credits")
+            product_099?.visibility = View.VISIBLE
+        if(sku == "499_credits")
+            product_499?.visibility = View.VISIBLE
+        if(sku == "999_credits")
+            product_999?.visibility = View.VISIBLE
+
     }
 
     private val purchaseUpdateListener =
