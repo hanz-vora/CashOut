@@ -10,6 +10,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.billingclient.api.*
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -37,6 +40,10 @@ class MainActivity : AppCompatActivity() {
         main_email.text = "Account: $emailId"
         updateAmount()
         setUpBillingClient()
+        MobileAds.initialize(this){}
+        AdView adView = (AdView) findViewById(R.id.adView)
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
         //initListeners()
         button_logout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
