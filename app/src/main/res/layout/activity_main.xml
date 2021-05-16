@@ -91,7 +91,7 @@
                 android:layout_marginStart="150dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="150dp"
-                android:text = "60% of Amount Transferred will be sent to your PayPal in 2-3 weeks"
+                android:text = "60% of Amount Transferred will be sent to your PayPal in 2-3 weeks. Users outside of Canada may receive lower transfers due to international fees."
                 android:textAlignment="center"
                 android:textColor="@color/teal_200"
                 android:id="@+id/amount_desc"
