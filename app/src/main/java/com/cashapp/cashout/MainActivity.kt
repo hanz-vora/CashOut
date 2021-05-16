@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private var fs = Firebase.firestore
     private val db = FirebaseFirestore.getInstance()
     val map = mapOf("99_credits" to 0.99, "499_credits" to 4.99, "999_credits" to 9.99)
+    lateinit var mAdView : AdView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,10 +41,10 @@ class MainActivity : AppCompatActivity() {
         main_email.text = "Account: $emailId"
         updateAmount()
         setUpBillingClient()
-        MobileAds.initialize(this){}
-        AdView adView = (AdView) findViewById(R.id.adView)
+        MobileAds.initialize(this) {}
+        mAdView = findViewById(R.id.adView)
         val adRequest = AdRequest.Builder().build()
-        adView.loadAd(adRequest)
+        mAdView.loadAd(adRequest)
         //initListeners()
         button_logout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
