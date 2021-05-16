@@ -17,7 +17,7 @@
         android:theme="@style/Theme.CashOut">
         <meta-data
         android:name="com.google.android.gms.ads.APPLICATION_ID"
-        android:value="ca-app-pub-3940256099942544~3347511713" />
+        android:value="ca-app-pub-3219002957521374~3972419235" />
         <activity android:name="com.cashapp.cashout.RegisterActivity"
             android:screenOrientation="portrait"></activity>
         <activity android:name="com.cashapp.cashout.LoginActivity"
