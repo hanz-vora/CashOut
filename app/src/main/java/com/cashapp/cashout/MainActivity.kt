@@ -10,6 +10,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.billingclient.api.*
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -27,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private var fs = Firebase.firestore
     private val db = FirebaseFirestore.getInstance()
     val map = mapOf("99_credits" to 0.99, "499_credits" to 4.99, "999_credits" to 9.99)
+    lateinit var mAdView : AdView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +41,10 @@ class MainActivity : AppCompatActivity() {
         main_email.text = "Account: $emailId"
         updateAmount()
         setUpBillingClient()
+        MobileAds.initialize(this) {}
+        mAdView = findViewById(R.id.adView)
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
         //initListeners()
         button_logout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
