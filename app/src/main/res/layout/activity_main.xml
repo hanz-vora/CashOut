@@ -119,6 +119,13 @@
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
+        <NumberPicker
+                android:id="@+id/numberPicker"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+
 
             <TextView
                 android:id="@+id/amount"
@@ -166,7 +173,6 @@
                 android:textAlignment="center"
                 android:fontFamily='@font/pt_mono'
                 android:textColor="@color/colorAccent"
-                android:textStyle="bold"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

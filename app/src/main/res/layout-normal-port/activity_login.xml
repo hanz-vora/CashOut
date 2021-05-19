@@ -68,7 +68,6 @@
         app:layout_constraintTop_toBottomOf="@id/password_et"
         android:text="Remember me?"
         android:textColor="@color/colorAccent"
-        android:textStyle='bold'
         android:fontFamily='@font/pt_mono'
         android:buttonTint='#7fe35c'
         />

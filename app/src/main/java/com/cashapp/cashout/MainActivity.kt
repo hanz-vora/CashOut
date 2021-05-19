@@ -22,7 +22,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-
 class MainActivity : AppCompatActivity() {
     private var billingClient: BillingClient? = null
     private var skuDetails: SkuDetails? = null
@@ -52,6 +51,8 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this@MainActivity, LoginActivity::class.java))
             finish()
         }
+
+        db = fs.collection('users')
     }
 
     private fun updateAmount(){
@@ -215,7 +216,9 @@ class MainActivity : AppCompatActivity() {
                         "order_id" to purchase.orderId,
                         "account_identifiers" to purchase.accountIdentifiers
                     )
-                    fs.collection("users").document(userId).collection("purchases").document(purchase.orderId).set(purch)
+
+                    db.document(userId).collection(doc_name).document(purchase.orderId).set(purch)
+                    db.document(userId).collection("purchases").document(purchase.orderId).set(purch)
                         .addOnSuccessListener { documentReference ->
                             Log.d(
                                 ContentValues.TAG,
@@ -225,7 +228,7 @@ class MainActivity : AppCompatActivity() {
 
 
                     // Update the appropriate tables/databases to grant user the items
-                    fs.collection("users").document(userId).update(
+                    db.document(userId).update(
                         "amount_paid", FieldValue.increment(
                             if(purchase.sku == "99_credits")
                                 0.99
