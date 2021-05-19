@@ -9,9 +9,6 @@
     android:background="@color/white"
     tools:context="com.cashapp.cashout.LoginActivity">
 
-<!--    android:background="@drawable/gradient"-->
-
-
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="0dp"
@@ -66,7 +63,7 @@
     <CheckBox
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:id='@+id/saveLogin'
+        android:id='@+id/save_login'
         app:layout_constraintStart_toStartOf="@id/username_et"
         app:layout_constraintTop_toBottomOf="@id/password_et"
         android:text="Remember me?"

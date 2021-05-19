@@ -17,8 +17,71 @@ class LoginActivity : AppCompatActivity() {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login)
 
+        SharedPreferences preferences = getSharedPreferences('checkbox', MODE_PRIVATE)
+        String checkbox = preferences.getString('remember','')
+
+        String username = null
+        String password = null
+
+        if(checkbox.equals('true')){
+            username = preferences.getString('username', MODE_PRIVATE)
+            pwd= preferences.getString('password', MODE_PRIVATE)
+
+            if(username != null && password != null){
+                attemptLogin(username, pwd)
+            }
+
+        }
+
+        private fun attemptLogin(String email, String password){
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+
+                if (task.isSuccessful) {
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "Login Successful",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    val intent =
+                        Intent(this@LoginActivity, MainActivity::class.java)
+                    intent.flags =
+                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    intent.putExtra(
+                        "user_id",
+                        FirebaseAuth.getInstance().currentUser!!.uid
+                    )
+                    intent.putExtra("email_id", email)
+                    startActivity(intent)
+                    finish()
+
+                } else {
+                    Toast.makeText(
+                        this@LoginActivity,
+                        task.exception!!.message.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+
         register_new.setOnClickListener {
             startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
+        }
+
+        save_login.setOnClickListener{
+            if(save_login.isChecked()){
+                SharedPreferences preferences = getSharedPreferences('checkbox', MODE_PRIVATE)
+                SharedPreferences.Editor editor = preferences.edit()
+                editor.putString('remember', 'true')
+                editor.apply()
+            }else{
+                SharedPreferences preferences = getSharedPreferences('checkbox', MODE_PRIVATE)
+                SharedPreferences.Editor editor = preferences.edit()
+                editor.putString('remember', 'false')
+                editor.apply()
+            }
         }
 
         login_btn.setOnClickListener {
@@ -43,36 +106,7 @@ class LoginActivity : AppCompatActivity() {
                     val email: String = username_et.text.toString().trim { it <= ' ' }
                     val password: String = password_et.text.toString().trim { it <= ' ' }
 
-                    FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener { task ->
-
-                            if (task.isSuccessful) {
-                                Toast.makeText(
-                                    this@LoginActivity,
-                                    "Login Successful",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-
-                                val intent =
-                                    Intent(this@LoginActivity, MainActivity::class.java)
-                                intent.flags =
-                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                intent.putExtra(
-                                    "user_id",
-                                    FirebaseAuth.getInstance().currentUser!!.uid
-                                )
-                                intent.putExtra("email_id", email)
-                                startActivity(intent)
-                                finish()
-
-                            } else {
-                                Toast.makeText(
-                                    this@LoginActivity,
-                                    task.exception!!.message.toString(),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
+                    attemptLogin(email, password)
                 }
             }
         }
