@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient"
     android:paddingTop="20dp"
     android:paddingBottom="20dp"
+    android:background="@color/white"
     tools:context="com.cashapp.cashout.LoginActivity">
+
+<!--    android:background="@drawable/gradient"-->
 
 
     <ImageView
@@ -34,6 +36,7 @@
         android:padding="10dip"
         android:background="@drawable/rounded_edittext"
         android:drawableLeft="@drawable/ic_action_user"
+        android:fontFamily="@font/pt_mono"
         android:ems="10"
         android:hint="Email"
         android:inputType="textPersonName"
@@ -53,11 +56,25 @@
         android:background="@drawable/rounded_edittext"
         android:drawableLeft="@drawable/ic_action_pass"
         android:ems="10"
+        android:fontFamily="@font/pt_mono"
         android:hint="Password"
         android:inputType="textPassword"
         android:textColorHint="@color/white"
         android:textColor="@color/white"
         android:textSize="16dp"/>
+    
+    <CheckBox
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id='@+id/saveLogin'
+        app:layout_constraintStart_toStartOf="@id/username_et"
+        app:layout_constraintTop_toBottomOf="@id/password_et"
+        android:text="Remember me?"
+        android:textColor="@color/colorAccent"
+        android:textStyle='bold'
+        android:fontFamily='@font/pt_mono'
+        android:buttonTint='#7fe35c'
+        />
 
     <androidx.cardview.widget.CardView
         app:layout_constraintStart_toStartOf="parent"
@@ -81,21 +98,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
+                android:fontFamily="@font/pt_mono"
                 android:text="Login"
-                android:textColor="#fff"
-                android:textSize="18sp" />
+                android:textColor="#7fe35c"
+                android:textStyle="bold"
+                android:textSize="29sp" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="@id/login_btn"
         app:layout_constraintEnd_toEndOf="@id/login_btn"
         android:id="@+id/register_new"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:textColor="@color/white"
+        android:fontFamily="@font/pt_mono"
+        android:textColor="@color/colorAccent"
+        android:textSize="14sp"
         app:layout_constraintTop_toBottomOf="@id/login_btn"
         android:text="Register Here" />
 

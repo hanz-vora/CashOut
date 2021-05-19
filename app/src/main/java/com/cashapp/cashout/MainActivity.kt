@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         userId = intent.getStringExtra("user_id")!!
         val emailId = intent.getStringExtra("email_id")
-        main_email.text = "Account: $emailId"
+        main_email.text = "$emailId"
         updateAmount()
         setUpBillingClient()
         MobileAds.initialize(this) {}
