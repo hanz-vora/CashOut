@@ -8,7 +8,6 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import android.content.SharedPreferences  
 import kotlinx.android.synthetic.main.activity_login.*
 
 
@@ -18,23 +17,13 @@ class LoginActivity : AppCompatActivity() {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login)
 
-        SharedPreferences preferences = getSharedPreferences("checkbox", MODE_PRIVATE)
-        val checkbox = preferences.getval("remember",'')
+        var preferences:SharedPreferences  = this.getSharedPreferences("checkbox", MODE_PRIVATE)
+        val checkbox = preferences.getString("remember","")
 
-        val username = null
-        val password = null
+        var username: String? = null
+        var pwd: String? = null
 
-        if(checkbox.equals('true')){
-            username = preferences.getString('username', MODE_PRIVATE)
-            pwd= preferences.getString('password', MODE_PRIVATE)
-
-            if(username != null && password != null){
-                attemptLogin(username, pwd)
-            }
-
-        }
-
-        private fun attemptLogin(val email, val password){
+        fun attemptLogin(email: String, password: String){
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
 
@@ -54,6 +43,10 @@ class LoginActivity : AppCompatActivity() {
                         FirebaseAuth.getInstance().currentUser!!.uid
                     )
                     intent.putExtra("email_id", email)
+                    val editor: SharedPreferences.Editor = preferences.edit()
+                    editor.putString("username", email)
+                    editor.putString("password", password)
+                    editor.apply()
                     startActivity(intent)
                     finish()
 
@@ -67,20 +60,31 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+        if(checkbox.equals("true")){
+            username = preferences.getString("username", null)
+            pwd = preferences.getString("password", null)
+
+            if(username != null  && pwd != null){
+
+                username_et.setText(username)
+                password_et.setText(pwd)
+                attemptLogin(username, pwd)
+            }
+
+        }
+
         register_new.setOnClickListener {
             startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
         }
 
-        save_login.setOnClickListener{
-            if(save_login.isChecked()){
-                SharedPreferences preferences = getSharedPreferences('checkbox', MODE_PRIVATE)
-                SharedPreferences.Editor editor = preferences.edit()
-                editor.putString('remember', 'true')
+        save_login.setOnCheckedChangeListener{ _, isChecked ->
+            preferences = getSharedPreferences("checkbox", MODE_PRIVATE)
+            val editor: SharedPreferences.Editor  = preferences.edit()
+            if(isChecked){
+                editor.putString("remember", "true")
                 editor.apply()
             }else{
-                SharedPreferences preferences = getSharedPreferences('checkbox', MODE_PRIVATE)
-                SharedPreferences.Editor editor = preferences.edit()
-                editor.putString('remember', 'false')
+                editor.putString("remember", "false")
                 editor.apply()
             }
         }

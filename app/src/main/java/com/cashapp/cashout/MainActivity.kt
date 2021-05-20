@@ -2,6 +2,7 @@ package com.cashapp.cashout
 
 import android.content.ContentValues
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -21,13 +22,15 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import kotlin.collections.ArrayList
+import java.text.DateFormatSymbols
 
 class MainActivity : AppCompatActivity() {
     private var billingClient: BillingClient? = null
     private var skuDetails: SkuDetails? = null
     private var userId = ""
     private var fs = Firebase.firestore
-    private val db = FirebaseFirestore.getInstance()
+    private val db = fs.collection("users")
+    val doc_name  = Calendar.getInstance().get(Calendar.YEAR).toString() + "-" + DateFormatSymbols.getInstance().getMonths()[Calendar.getInstance().get(Calendar.MONTH)]
     val map = mapOf("99_credits" to 0.99, "499_credits" to 4.99, "999_credits" to 9.99)
     lateinit var mAdView : AdView
 
@@ -44,22 +47,33 @@ class MainActivity : AppCompatActivity() {
         mAdView = findViewById(R.id.adView)
         val adRequest = AdRequest.Builder().build()
         mAdView.loadAd(adRequest)
+
+        year_picker.minValue = 1
+        year_picker.maxValue = Calendar.getInstance().get(Calendar.YEAR)
+        year_picker.wrapSelectorWheel = true
+        month_picker.minValue = 0
+        month_picker.maxValue = 11
+        month_picker.displayedValues = arrayOf<String>("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
+        month_picker.wrapSelectorWheel = true
+
         //initListeners()
         button_logout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
-
+            val preferences = getSharedPreferences("checkbox", MODE_PRIVATE)
+            val editor: SharedPreferences.Editor  = preferences.edit()
+            editor.putString("remember", "false")
+            editor.apply()
             startActivity(Intent(this@MainActivity, LoginActivity::class.java))
             finish()
         }
 
-        db = fs.collection('users')
-        val docRef = db.collection("users").document(userId)
-
-        val doc_name = 
+        month_picker.setOnValueChangedListener{month_picker, old_month, new_month ->}
+        year_picker.setOnValueChangedListener{year_picker, old_month, new_month ->}
     }
 
     private fun updateAmount(){
-        docRef.get()
+        val doc_ref = db.document(userId)
+        doc_ref.get()
             .addOnSuccessListener { document ->
                 if(document != null){
                     amount.text = "Amount Transferred: $${"%.2f".format(document.getDouble("amount_paid"))} CAD"
@@ -218,7 +232,7 @@ class MainActivity : AppCompatActivity() {
                         "order_id" to purchase.orderId,
                         "account_identifiers" to purchase.accountIdentifiers
                     )
-
+                    val doc_ref = db.document(userId)
                     doc_ref.collection(doc_name).document(purchase.orderId).set(purch)
                     doc_ref.collection("purchases").document(purchase.orderId).set(purch)
                         .addOnSuccessListener { documentReference ->

@@ -118,14 +118,41 @@
                 android:textSize="29sp" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
-
+        <TextView
+            app:layout_constraintStart_toStartOf="@id/product_999"
+            app:layout_constraintEnd_toStartOf="@id/year_picker"
+            app:layout_constraintTop_toBottomOf="@id/product_999"
+            android:id="@+id/year_text"
+            android:layout_marginTop="20dp"
+            android:text="Month"
+            android:fontFamily='@font/pt_mono'
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/colorAccent"
+            android:textStyle='bold'
+            android:textAlignment="center"/>
         <NumberPicker
-                android:id="@+id/numberPicker"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:layout_constraintTop_toBottomOf="@id/product_999"
+            app:layout_constraintStart_toStartOf="@id/product_999"
+            app:layout_constraintEnd_toStartOf="@id/year_picker"
+            android:id="@+id/month_picker"
+            android:layout_width="0dp"
+            android:theme="@style/ThemeOverlay.NumberPicker"
+            android:fontFamily='@font/pt_mono'
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:layout_constraintTop_toBottomOf="@id/year_text"
                 />
+        <NumberPicker
+            app:layout_constraintStart_toEndOf="@id/month_picker"
+            android:theme="@style/ThemeOverlay.NumberPicker"
+            app:layout_constraintEnd_toEndOf="@id/product_999"
+            android:id="@+id/year_picker"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:layout_constraintTop_toBottomOf="@id/product_999"
+            />
 
 
 
@@ -138,6 +165,7 @@
                 android:layout_marginTop="100dp"
                 android:layout_marginEnd="150dp"
                 android:text = "0"
+                android:visibility="gone"
                 android:textAlignment="center"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
@@ -160,7 +188,7 @@
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/amount" />
+                app:layout_constraintTop_toBottomOf="@id/year_picker" />
 
             <TextView
                 android:id="@+id/main_email"
