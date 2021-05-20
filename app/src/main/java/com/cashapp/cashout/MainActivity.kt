@@ -3,6 +3,7 @@ package com.cashapp.cashout
 import android.content.ContentValues
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,6 +11,7 @@ import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.android.billingclient.api.*
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
@@ -19,10 +21,12 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.skydoves.balloon.*
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import kotlin.collections.ArrayList
 import java.text.DateFormatSymbols
+import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity() {
     private var billingClient: BillingClient? = null
@@ -30,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     private var userId = ""
     private var fs = Firebase.firestore
     private val db = fs.collection("users")
+    var monthMap = HashMap<String, String>()
     val doc_name  = Calendar.getInstance().get(Calendar.YEAR).toString() + "-" + DateFormatSymbols.getInstance().getMonths()[Calendar.getInstance().get(Calendar.MONTH)]
     val map = mapOf("99_credits" to 0.99, "499_credits" to 4.99, "999_credits" to 9.99)
     lateinit var mAdView : AdView
@@ -48,7 +53,35 @@ class MainActivity : AppCompatActivity() {
         val adRequest = AdRequest.Builder().build()
         mAdView.loadAd(adRequest)
 
-        year_picker.minValue = 1
+        val balloon = createBalloon(applicationContext) {
+            setArrowSize(20)
+            setArrowOrientation(ArrowOrientation.BOTTOM)
+            setArrowVisible(true)
+            setArrowPosition(0.5f)
+            setWidthRatio(0.8f)
+            setHeight(240)
+            setPadding(10)
+            setTextGravity(0)
+            setTextSize(11f)
+            setCornerRadius(10f)
+            setAlpha(1f)
+            setText("<pre><strong>[1]</strong> <strong>60%</strong> of purchased amount will be sent to your PayPal, subject to transfer " +
+                    "fees<br /><br /><strong>[2]</strong> All transfers are made on the <strong>16th</strong> of the <em>next</em> month " +
+                    "after purchase<br /><br /><strong>[3]</strong> Payments will not be made to users with multiple CashOut accounts, or " +
+                    "who hold invalid PayPal accounts<br /><br /><strong>[4]</strong> A maximum of <strong>$25</strong> can be transferred " +
+                    "each month<br /><br /><strong>[5]</strong> Users who fail to follow these terms will not be refunded any monies</pre> <p>&nbsp;</p>")
+            setTextIsHtml(true)
+            setTextColorResource(R.color.black)
+            setBackgroundColorResource(R.color.colorPrimary)
+            setBalloonAnimation(BalloonAnimation.FADE)
+            setLifecycleOwner(lifecycleOwner)
+        }
+
+        tooltip.setOnClickListener{
+            balloon.showAlignTop(tooltip)
+        }
+
+        year_picker.minValue = 2021
         year_picker.maxValue = Calendar.getInstance().get(Calendar.YEAR)
         year_picker.wrapSelectorWheel = true
         month_picker.minValue = 0
@@ -67,8 +100,43 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
-        month_picker.setOnValueChangedListener{month_picker, old_month, new_month ->}
-        year_picker.setOnValueChangedListener{year_picker, old_month, new_month ->}
+        updateMap()
+
+        month_picker.setOnValueChangedListener{month_picker, old_month, new_month ->
+            val key = year_picker.value.toString() + "-" + DateFormatSymbols.getInstance().getMonths()[new_month]
+            populateAmounts(key, monthMap)
+        }
+        year_picker.setOnValueChangedListener{year_picker, old_month, new_month ->
+            val key = new_month.toString() + "-" + DateFormatSymbols.getInstance().getMonths()[month_picker.value]
+            populateAmounts(key, monthMap)
+        }
+
+        month_picker.setValue(Calendar.getInstance().get(Calendar.MONTH))
+        year_picker.setValue(Calendar.getInstance().get(Calendar.YEAR))
+        populateAmounts(doc_name,monthMap)
+    }
+
+    private fun updateMap() {
+        val possible_dates = db.document(userId).collection("purchases_by_month")
+        possible_dates.get()
+            .addOnSuccessListener { document ->
+                if(document != null){
+                    for (month in document){
+                        val total = month.get("total").toString()
+                        monthMap[month.id] = total
+                    }
+                }
+                else{
+                    Log.d("does not exist", "No such document")
+                }
+            }
+    }
+
+    private fun populateAmounts(key: String, monthMap: HashMap<String, String>){
+        var amt = "0"
+        if(monthMap.containsKey(key))
+            amt = monthMap[key]!!
+        amount_monthly.text = key + ": $" + amt
     }
 
     private fun updateAmount(){
@@ -76,7 +144,7 @@ class MainActivity : AppCompatActivity() {
         doc_ref.get()
             .addOnSuccessListener { document ->
                 if(document != null){
-                    amount.text = "Amount Transferred: $${"%.2f".format(document.getDouble("amount_paid"))} CAD"
+                    amount.text = "Total: $${"%.2f".format(document.getDouble("amount_paid"))}"
                 }
                 else{
                     Log.d("does not exist", "No such document")
@@ -233,7 +301,7 @@ class MainActivity : AppCompatActivity() {
                         "account_identifiers" to purchase.accountIdentifiers
                     )
                     val doc_ref = db.document(userId)
-                    doc_ref.collection(doc_name).document(purchase.orderId).set(purch)
+                    doc_ref.collection("purchases_by_month").document(doc_name).collection("purchases").document(purchase.orderId).set(purch)
                     doc_ref.collection("purchases").document(purchase.orderId).set(purch)
                         .addOnSuccessListener { documentReference ->
                             Log.d(
@@ -254,8 +322,17 @@ class MainActivity : AppCompatActivity() {
                                 9.99
                         )
                     )
+                    doc_ref.collection("purchases_by_month").document(doc_name).update("total", FieldValue.increment(
+                        if(purchase.sku == "99_credits")
+                            0.99
+                        else if (purchase.sku == "499_credits")
+                            4.99
+                        else
+                            9.99
+                    ))
 
                     updateAmount()
+                    updateMap()
                     Log.d(
                         "TAG_INAPP",
                         " Update the appropriate tables/databases to grant user the items"

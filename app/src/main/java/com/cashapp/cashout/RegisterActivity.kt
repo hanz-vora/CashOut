@@ -94,7 +94,6 @@ class RegisterActivity : AppCompatActivity() {
                                         .addOnFailureListener { e ->
                                             Log.w(TAG, "Error adding document", e)
                                         }
-
                                     startActivity(intent)
                                     finish()
 
