@@ -8,6 +8,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import android.content.SharedPreferences  
 import kotlinx.android.synthetic.main.activity_login.*
 
 
@@ -17,11 +18,11 @@ class LoginActivity : AppCompatActivity() {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login)
 
-        SharedPreferences preferences = getSharedPreferences('checkbox', MODE_PRIVATE)
-        String checkbox = preferences.getString('remember','')
+        SharedPreferences preferences = getSharedPreferences("checkbox", MODE_PRIVATE)
+        val checkbox = preferences.getval("remember",'')
 
-        String username = null
-        String password = null
+        val username = null
+        val password = null
 
         if(checkbox.equals('true')){
             username = preferences.getString('username', MODE_PRIVATE)
@@ -33,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
 
         }
 
-        private fun attemptLogin(String email, String password){
+        private fun attemptLogin(val email, val password){
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
 

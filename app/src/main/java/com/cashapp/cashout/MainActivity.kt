@@ -53,10 +53,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         db = fs.collection('users')
+        val docRef = db.collection("users").document(userId)
+
+        val doc_name = 
     }
 
     private fun updateAmount(){
-        val docRef = db.collection("users").document(userId)
         docRef.get()
             .addOnSuccessListener { document ->
                 if(document != null){
@@ -217,8 +219,8 @@ class MainActivity : AppCompatActivity() {
                         "account_identifiers" to purchase.accountIdentifiers
                     )
 
-                    db.document(userId).collection(doc_name).document(purchase.orderId).set(purch)
-                    db.document(userId).collection("purchases").document(purchase.orderId).set(purch)
+                    doc_ref.collection(doc_name).document(purchase.orderId).set(purch)
+                    doc_ref.collection("purchases").document(purchase.orderId).set(purch)
                         .addOnSuccessListener { documentReference ->
                             Log.d(
                                 ContentValues.TAG,
@@ -228,7 +230,7 @@ class MainActivity : AppCompatActivity() {
 
 
                     // Update the appropriate tables/databases to grant user the items
-                    db.document(userId).update(
+                    doc_ref.update(
                         "amount_paid", FieldValue.increment(
                             if(purchase.sku == "99_credits")
                                 0.99
