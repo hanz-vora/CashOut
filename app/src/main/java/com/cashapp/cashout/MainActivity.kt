@@ -267,7 +267,6 @@ class MainActivity : AppCompatActivity() {
             product_499?.visibility = View.VISIBLE
         if(sku == "999_credits")
             product_999?.visibility = View.VISIBLE
-
     }
 
     private val purchaseUpdateListener =
@@ -310,26 +309,31 @@ class MainActivity : AppCompatActivity() {
                             )
                         }
 
+                    var new_total = 0
+                    var purchase_amount = 0
+                    val this_month = DateFormatSymbols.getInstance().getMonths()[Calendar.getInstance().get(Calendar.MONTH)]
+
+                    if(monthMap.containsKey(this_month)){
+                        new_total = monthMap[this_month]
+                    }
+                    
+                    if(purchase.sku == "99_credits")
+                        purchase_amount = 0.99
+                    else if (purchase.sku == "499_credits")
+                        purchase_amount = 4.99
+                    else
+                        purchase_amount = 9.99
+
+                    new_total += purchase_amount
+
 
                     // Update the appropriate tables/databases to grant user the items
                     doc_ref.update(
                         "amount_paid", FieldValue.increment(
-                            if(purchase.sku == "99_credits")
-                                0.99
-                            else if (purchase.sku == "499_credits")
-                                4.99
-                            else
-                                9.99
-                        )
-                    )
-                    doc_ref.collection("purchases_by_month").document(doc_name).update("total", FieldValue.increment(
-                        if(purchase.sku == "99_credits")
-                            0.99
-                        else if (purchase.sku == "499_credits")
-                            4.99
-                        else
-                            9.99
+                            purchase_amount
                     ))
+
+                    doc_ref.collection("purchases_by_month").document(doc_name).set(hashMapOf("total" to new_total))
 
                     updateAmount()
                     updateMap()
