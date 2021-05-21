@@ -17,6 +17,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -97,6 +98,7 @@ class MainActivity : AppCompatActivity() {
             editor.putString("remember", "false")
             editor.apply()
             startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+            Firebase.auth.signOut()
             finish()
         }
 
@@ -309,12 +311,12 @@ class MainActivity : AppCompatActivity() {
                             )
                         }
 
-                    var new_total = 0
-                    var purchase_amount = 0
+                    var new_total = 0.00
+                    var purchase_amount = 0.00
                     val this_month = DateFormatSymbols.getInstance().getMonths()[Calendar.getInstance().get(Calendar.MONTH)]
 
                     if(monthMap.containsKey(this_month)){
-                        new_total = monthMap[this_month]
+                        new_total = monthMap[this_month]!!.toDouble()
                     }
                     
                     if(purchase.sku == "99_credits")

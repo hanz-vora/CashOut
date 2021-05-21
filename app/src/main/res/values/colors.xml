@@ -10,5 +10,6 @@
     <color name="colorPrimary">#F8F8F8</color>
     <color name="colorPrimaryDark">#222934</color>
     <color name="colorAccent">#41484a</color>
+    <color name="GoogleTextColor">#444444</color>
 
 </resources>
