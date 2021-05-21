@@ -96,6 +96,7 @@ class MainActivity : AppCompatActivity() {
             val preferences = getSharedPreferences("checkbox", MODE_PRIVATE)
             val editor: SharedPreferences.Editor  = preferences.edit()
             editor.putString("remember", "false")
+            editor.putString("google", "false")
             editor.apply()
             startActivity(Intent(this@MainActivity, LoginActivity::class.java))
             Firebase.auth.signOut()
@@ -112,10 +113,6 @@ class MainActivity : AppCompatActivity() {
             val key = new_month.toString() + "-" + DateFormatSymbols.getInstance().getMonths()[month_picker.value]
             populateAmounts(key, monthMap)
         }
-
-        month_picker.setValue(Calendar.getInstance().get(Calendar.MONTH))
-        year_picker.setValue(Calendar.getInstance().get(Calendar.YEAR))
-        populateAmounts(doc_name,monthMap)
     }
 
     private fun updateMap() {
@@ -127,6 +124,9 @@ class MainActivity : AppCompatActivity() {
                         val total = month.get("total").toString()
                         monthMap[month.id] = total
                     }
+                    month_picker.setValue(Calendar.getInstance().get(Calendar.MONTH))
+                    year_picker.setValue(Calendar.getInstance().get(Calendar.YEAR))
+                    populateAmounts(doc_name, monthMap)
                 }
                 else{
                     Log.d("does not exist", "No such document")
@@ -134,11 +134,11 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-    private fun populateAmounts(key: String, monthMap: HashMap<String, String>){
+    private fun populateAmounts(key: String, monthMap: HashMap<String, String>) {
         var amt = "0"
-        if(monthMap.containsKey(key))
+        if (monthMap.containsKey(key))
             amt = monthMap[key]!!
-        amount_monthly.text = key + ": $" + amt
+        amount_monthly.text = "$key: $${"%.2f".format(amt.toDouble())}"
     }
 
     private fun updateAmount(){
@@ -313,10 +313,9 @@ class MainActivity : AppCompatActivity() {
 
                     var new_total = 0.00
                     var purchase_amount = 0.00
-                    val this_month = DateFormatSymbols.getInstance().getMonths()[Calendar.getInstance().get(Calendar.MONTH)]
 
-                    if(monthMap.containsKey(this_month)){
-                        new_total = monthMap[this_month]!!.toDouble()
+                    if(monthMap.containsKey(doc_name)){
+                        new_total = monthMap[doc_name]!!.toDouble()
                     }
                     
                     if(purchase.sku == "99_credits")
@@ -336,7 +335,6 @@ class MainActivity : AppCompatActivity() {
                     ))
 
                     doc_ref.collection("purchases_by_month").document(doc_name).set(hashMapOf("total" to new_total))
-
                     updateAmount()
                     updateMap()
                     Log.d(

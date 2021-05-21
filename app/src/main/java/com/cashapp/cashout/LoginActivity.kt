@@ -148,9 +148,10 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
+        var preferences: SharedPreferences = this.getSharedPreferences("checkbox", MODE_PRIVATE)
+        val loggedInWithGoogle = preferences.getString("google", "")
         val currentUser = auth.currentUser
-        if (currentUser != null) {
+        if (currentUser != null && loggedInWithGoogle == "true") {
             login_with_google(currentUser, false)
         }
     }
@@ -224,6 +225,12 @@ class LoginActivity : AppCompatActivity() {
 
         googleSignInClient.signOut()
         intent.putExtra("email_id", email)
+
+        var preferences = getSharedPreferences("checkbox", MODE_PRIVATE)
+        val editor: SharedPreferences.Editor = preferences.edit()
+        editor.putString("google", "true")
+        editor.apply()
+
         startActivity(intent)
         finish()
     }
