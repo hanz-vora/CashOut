@@ -36,7 +36,9 @@ class MainActivity : AppCompatActivity() {
     private var fs = Firebase.firestore
     private val db = fs.collection("users")
     var monthMap = HashMap<String, String>()
-    val doc_name  = Calendar.getInstance().get(Calendar.YEAR).toString() + "-" + DateFormatSymbols.getInstance().getMonths()[Calendar.getInstance().get(Calendar.MONTH)]
+    val doc_name  = Calendar.getInstance(Locale.ENGLISH).get(Calendar.YEAR).toString() + "-" + DateFormatSymbols.getInstance(
+        Locale.ENGLISH).getMonths()[Calendar.getInstance(
+        Locale.ENGLISH).get(Calendar.MONTH)]
     val map = mapOf("99_credits" to 0.99, "499_credits" to 4.99, "999_credits" to 9.99)
     lateinit var mAdView : AdView
 
@@ -83,7 +85,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         year_picker.minValue = 2021
-        year_picker.maxValue = Calendar.getInstance().get(Calendar.YEAR)
+        year_picker.maxValue = Calendar.getInstance(Locale.ENGLISH).get(Calendar.YEAR)
         year_picker.wrapSelectorWheel = true
         month_picker.minValue = 0
         month_picker.maxValue = 11
@@ -106,11 +108,11 @@ class MainActivity : AppCompatActivity() {
         updateMap()
 
         month_picker.setOnValueChangedListener{month_picker, old_month, new_month ->
-            val key = year_picker.value.toString() + "-" + DateFormatSymbols.getInstance().getMonths()[new_month]
+            val key = year_picker.value.toString() + "-" + DateFormatSymbols.getInstance(Locale.ENGLISH).getMonths()[new_month]
             populateAmounts(key, monthMap)
         }
         year_picker.setOnValueChangedListener{year_picker, old_month, new_month ->
-            val key = new_month.toString() + "-" + DateFormatSymbols.getInstance().getMonths()[month_picker.value]
+            val key = new_month.toString() + "-" + DateFormatSymbols.getInstance(Locale.ENGLISH).getMonths()[month_picker.value]
             populateAmounts(key, monthMap)
         }
     }
@@ -124,8 +126,8 @@ class MainActivity : AppCompatActivity() {
                         val total = month.get("total").toString()
                         monthMap[month.id] = total
                     }
-                    month_picker.setValue(Calendar.getInstance().get(Calendar.MONTH))
-                    year_picker.setValue(Calendar.getInstance().get(Calendar.YEAR))
+                    month_picker.setValue(Calendar.getInstance(Locale.ENGLISH).get(Calendar.MONTH))
+                    year_picker.setValue(Calendar.getInstance(Locale.ENGLISH).get(Calendar.YEAR))
                     populateAmounts(doc_name, monthMap)
                 }
                 else{
