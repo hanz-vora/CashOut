@@ -3,6 +3,7 @@ package com.cashapp.cashout
 import android.content.ContentValues
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
@@ -117,6 +118,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun checkMonthlyLimit() {
+        if(monthMap.containsKey(doc_name) ){
+            var amt = monthMap[doc_name]?.toDouble()!!
+
+            if(amt > 24) {
+                product_099.setCardBackgroundColor(Color.rgb(211,211,211))
+                product_099.isEnabled = false
+                transfer_text.text = "Monthly Limit Reached"
+            }
+            if(amt > 20) {
+                product_499.setCardBackgroundColor(Color.rgb(211, 211, 211))
+                product_499.isEnabled = false
+            }
+            if(amt > 15) {
+                product_999.setCardBackgroundColor(Color.rgb(211, 211, 211))
+                product_999.isEnabled = false
+            }
+        }
+    }
+
     private fun updateMap() {
         val possible_dates = db.document(userId).collection("purchases_by_month")
         possible_dates.get()
@@ -129,6 +150,7 @@ class MainActivity : AppCompatActivity() {
                     month_picker.setValue(Calendar.getInstance(Locale.ENGLISH).get(Calendar.MONTH))
                     year_picker.setValue(Calendar.getInstance(Locale.ENGLISH).get(Calendar.YEAR))
                     populateAmounts(doc_name, monthMap)
+                    checkMonthlyLimit()
                 }
                 else{
                     Log.d("does not exist", "No such document")
